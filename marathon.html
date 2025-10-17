@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marathon Mode - Bible Verse Guesser</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <a href="/" class="back-button">&larr; Back to Menu</a>
+    <div class="container">
+        <h1>Bible Guesser - Marathon Mode</h1>
+        <h2 id="round-counter">Round 1 of 5</h2>
+
+        <div id="verse-container">
+            <p id="loading-text">Loading verses...</p>
+            <!-- Verse context will be injected here by JS -->
+        </div>
+
+        <div class="controls-container" id="game-controls">
+            <div class="guess-section">
+                <input type="text" id="guess-input" placeholder="e.g., Genesis 1:1">
+                <button id="submit-guess">Submit Guess</button>
+            </div>
+        </div>
+
+        <div class="new-verse-section" id="start-new-game-section">
+            <button id="start-new-marathon">Start New Marathon</button>
+        </div>
+
+        <!-- Share code input will be shown at the start -->
+        <div class="controls-container" id="share-code-entry">
+            <div class="divider">OR</div>
+            <div class="share-code-section">
+                <input type="text" id="share-code-input" placeholder="Enter Marathon Code">
+                <button id="load-from-code">Load Shared Game</button>
+            </div>
+        </div>
+
+        <div class="new-verse-section">
+            <button id="next-round-btn" style="display: none;">Next Round</button>
+            <button id="view-results-btn" style="display: none;">View Final Results</button>
+        </div>
+
+        <div id="feedback"></div>
+    </div>
+
+    <script src="marathon.js"></script>
+</body>
+</html>

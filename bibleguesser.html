@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bible Verse Guesser</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+    <a href="index.html" class="back-button">&larr; Back to Menu</a>
+    <div class="container">
+        <h1>Bible Verse Guesser</h1>
+        <div id="verse-container">
+            <p id="loading-text">Loading a random verse...</p>
+            <!-- Verse context will be injected here by JS -->
+        </div>
+
+        <div class="controls-container">
+            <div class="guess-section">
+                <input type="text" id="guess-input" placeholder="e.g., Genesis 1:1">
+                <button id="submit-guess">Submit Guess</button>
+            </div>
+
+            <div class="divider">OR</div>
+
+            <div class="share-code-section">
+                <input type="text" id="share-code-input" placeholder="Enter share code">
+                <button id="load-from-code">Load Verse</button>
+            </div>
+        </div>
+
+        <div class="settings-container">
+            <label for="difficulty-slider">Context Verses: <span id="context-value">2</span></label>
+            <input type="range" id="difficulty-slider" min="0" max="5" value="2" class="slider">
+        </div>
+
+        <div class="new-verse-section">
+            <button id="random-verse-btn">Get New Random Verse</button>
+        </div>
+
+        <div id="feedback"></div>
+    </div>
+
+    <script src="bibleguesser.js"></script>
+</body>
+</html>

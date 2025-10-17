@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess Result</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="result.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Result</h1>
+        
+        <div class="result-summary">
+            <div class="score-container">
+                <p>Your Score:</p>
+                <h2 id="score">0/100</h2>
+            </div>
+            <div class="stars-container">
+                <div class="star" id="star-book">★</div>
+                <div class="star" id="star-chapter">★</div>
+                <div class="star" id="star-verse">★</div>
+            </div>
+        </div>
+
+        <div class="details-container">
+            <p>Your Guess: <strong id="user-guess"></strong></p>
+            <p>Correct Answer: <strong id="correct-answer"></strong></p>
+        </div>
+
+        <div id="verse-container" class="result-verse-container">
+            <p id="verse-text"></p>
+        </div>
+
+        <button id="play-again-button">Play Again</button>
+    </div>
+
+    <script src="result.js"></script>
+</body>
+</html>

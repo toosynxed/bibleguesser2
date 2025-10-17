@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marathon Results</title>
+    <link rel="stylesheet" href="result.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Marathon Complete!</h1>
+
+        <div class="result-summary">
+            <div class="score-container">
+                <h2>Total Score</h2>
+                <p id="total-score">0/500</p>
+            </div>
+            <div class="stars-container">
+                <h2>Total Stars</h2>
+                <p id="total-stars">0/15</p>
+            </div>
+        </div>
+
+        <div class="details-container">
+            <h3>Share Your Game!</h3>
+            <p>Let others play the same 5 verses. Copy the code below:</p>
+            <div class="share-section">
+                <input type="text" id="share-code" readonly>
+                <button id="copy-code-button">Copy Code</button>
+            </div>
+        </div>
+
+        <a href="index.html" class="play-again-button">Play Again</a>
+    </div>
+
+    <script src="marathon_result.js"></script>
+</body>
+</html>

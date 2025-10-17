@@ -1,0 +1,38 @@
+.result-summary {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #1e1e1e;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.score-container h2 {
+    font-size: 3em;
+    margin: 0;
+    color: #4CAF50;
+}
+
+.stars-container {
+    font-size: 3em;
+}
+
+.star {
+    display: inline-block;
+    color: #444; /* Dim color for unearned stars */
+}
+
+.star.active {
+    color: #FFD700; /* Gold for earned stars */
+}
+
+.details-container {
+    margin-bottom: 20px;
+    font-size: 1.2em;
+}
+
+.result-verse-container {
+    text-align: left;
+    font-style: italic;
+}
