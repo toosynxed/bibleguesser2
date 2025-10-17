@@ -13,7 +13,7 @@ export NVM_DIR=${1:-"/usr/local/share/nvm"}
 export NODE_VERSION=${2:-"lts"}
 USERNAME=${3:-"automatic"}
 UPDATE_RC=${4:-"true"}
-INSTALL_TOOLS_FOR_NODE_GYP="${5:-true}"
+INSTALL_TOOLS_FOR_NODE_GYP="${5:-false}"
 export NVM_VERSION="0.38.0"
 
 set -e
