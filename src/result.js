@@ -10,49 +10,65 @@ document.addEventListener('DOMContentLoaded', () => {
     const starChapter = document.getElementById('star-chapter');
     const starVerse = document.getElementById('star-verse');
 
-    // Retrieve the full result data from session storage
-    const resultJSON = sessionStorage.getItem('guessResult');
+    // Retrieve the guess data from session storage
+    const resultData = sessionStorage.getItem('guessResult');
+    const shareCode = sessionStorage.getItem('share_code');
 
-    if (!resultJSON) {
+    if (!resultData) {
         // If there's no data, redirect to the main page
         window.location.href = 'bibleguesser.html';
         return;
     }
 
-    const resultData = JSON.parse(resultJSON);
+    const payload = JSON.parse(resultData);
+    userGuessEl.textContent = payload.guess || 'No guess provided';
 
-    // Update the page with the results from session storage
-    scoreEl.textContent = `${resultData.score}/100`;
-    userGuessEl.textContent = resultData.user_guess || 'No guess provided';
-    correctAnswerEl.textContent = resultData.correct_answer;
-    verseTextEl.textContent = resultData.correct_text;
+    // Send the guess to the backend to be checked
+    fetch('/api/check-guess', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Update the page with the results from the backend
+        scoreEl.textContent = `${data.score}/100`;
+        correctAnswerEl.textContent = data.correct_answer;
+        verseTextEl.textContent = data.correct_text;
 
-    // Update stars based on the result
-    if (resultData.stars.book) starBook.classList.add('active');
-    if (resultData.stars.chapter) starChapter.classList.add('active');
-    if (resultData.stars.verse) starVerse.classList.add('active');
+        // Update stars based on the result
+        if (data.stars.book) starBook.classList.add('active');
+        if (data.stars.chapter) starChapter.classList.add('active');
+        if (data.stars.verse) starVerse.classList.add('active');
 
-    // Add the share code button if a code exists
-    const shareCode = resultData.share_code;
-    if (shareCode) {
-        const copyButton = document.createElement('button');
-        copyButton.id = 'copy-code-button';
-        copyButton.textContent = 'Copy Share Code';
-        copyButton.onclick = () => {
-            navigator.clipboard.writeText(shareCode).then(() => {
-                copyButton.textContent = 'Copied!';
-                setTimeout(() => { copyButton.textContent = 'Copy Share Code'; }, 2000);
-            }).catch(err => {
-                console.error('Failed to copy code: ', err);
-                alert('Failed to copy code.');
-            });
-        };
-        shareContainer.appendChild(copyButton);
-    }
+        // Add the share code button if a code exists
+        if (shareCode) {
+            const copyButton = document.createElement('button');
+            copyButton.id = 'copy-code-button';
+            copyButton.textContent = 'Copy Share Code';
+            copyButton.onclick = () => {
+                navigator.clipboard.writeText(shareCode).then(() => {
+                    copyButton.textContent = 'Copied!';
+                    setTimeout(() => { copyButton.textContent = 'Copy Share Code'; }, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy code: ', err);
+                    alert('Failed to copy code.');
+                });
+            };
+            shareContainer.appendChild(copyButton);
+        }
+    })
+    .catch(error => {
+        console.error('Error checking guess:', error);
+        correctAnswerEl.textContent = "Error checking guess. Please try again.";
+    });
 
     playAgainBtn.addEventListener('click', () => {
         // Clear session storage for a fresh start
         sessionStorage.removeItem('guessResult');
+        sessionStorage.removeItem('share_code');
         window.location.href = 'bibleguesser.html';
     });
 });
