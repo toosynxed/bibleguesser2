@@ -15,8 +15,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const CONTEXT_SIZE = 2;
 
+    // --- State Management Utility ---
+    const marathonState = {
+        get: () => JSON.parse(sessionStorage.getItem('marathonState')),
+        set: (state) => sessionStorage.setItem('marathonState', JSON.stringify(state)),
+        clear: () => sessionStorage.removeItem('marathonState'),
+        exists: () => sessionStorage.getItem('marathonState') !== null,
+        update: (updates) => marathonState.set({ ...marathonState.get(), ...updates })
+    };
+
     function initializeGame() {
-        sessionStorage.removeItem('marathonState');
+        marathonState.clear();
         loadingText.textContent = 'Loading new game...';
         verseContainer.innerHTML = '';
         verseContainer.appendChild(loadingText);
@@ -25,14 +34,14 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch('/api/marathon-verses')
             .then(response => response.json())
             .then(data => {
-                const marathonState = {
+                const initialState = {
                     verses: data.verses,
                     marathonShareCode: data.marathon_share_code,
                     currentRound: 0,
                     results: []
                 };
-                sessionStorage.setItem('marathonState', JSON.stringify(marathonState));
-                loadRound(marathonState);
+                marathonState.set(initialState);
+                loadRound(initialState);
             })
             .catch(error => {
                 console.error('Error fetching marathon verses:', error);
@@ -63,14 +72,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         Promise.all(versePromises)
             .then(verses => {
-                const marathonState = {
+                const initialState = {
                     verses: verses,
                     marathonShareCode: marathonCode,
                     currentRound: 0,
                     results: []
                 };
-                sessionStorage.setItem('marathonState', JSON.stringify(marathonState));
-                loadRound(marathonState);
+                marathonState.set(initialState);
+                loadRound(initialState);
             })
             .catch(error => {
                 console.error('Error loading verses from code:', error);
@@ -113,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        let state = JSON.parse(sessionStorage.getItem('marathonState'));
+        const state = marathonState.get();
         const verseData = state.verses[state.currentRound];
 
         const payload = {
@@ -131,9 +140,10 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(response => response.json())
         .then(result => {
-            state.results.push(result);
-            state.currentRound += 1;
-            sessionStorage.setItem('marathonState', JSON.stringify(state));
+            marathonState.update({
+                results: [...state.results, result],
+                currentRound: state.currentRound + 1
+            });
 
             feedbackEl.innerHTML = `
                 <p>Correct Answer: ${result.correct_answer}</p>
@@ -143,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
             guessInput.disabled = true;
             submitGuessBtn.disabled = true;
 
-            if (state.currentRound < 5) {
+            if (marathonState.get().currentRound < 5) {
                 nextRoundBtn.style.display = 'inline-block';
                 nextRoundBtn.focus();
             } else {
@@ -154,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function goToNextRound() {
-        const state = JSON.parse(sessionStorage.getItem('marathonState'));
+        const state = marathonState.get();
         loadRound(state);
     }
 
@@ -175,9 +185,8 @@ document.addEventListener('DOMContentLoaded', () => {
     loadFromCodeBtn.addEventListener('click', loadFromShareCode);
 
     // Initial Load
-    const existingState = sessionStorage.getItem('marathonState');
-    if (existingState) {
-        const state = JSON.parse(existingState);
+    if (marathonState.exists()) {
+        const state = marathonState.get();
         if (state.currentRound < 5) {
             loadRound(state);
         } else {
